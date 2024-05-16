@@ -1,35 +1,31 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavigationBar from "../components/navigationBar";
 
 export default function Internship() {
-  const data = [
-    {
-      id: "0",
-      employer: "EWAY",
-      profession: "Барилгын мужаан",
-      startDate: "2023/01/01",
-      endDate: "2023/12/31",
-      internCountCapacity: 5,
-      salary: "Цалингүй",
-    },
-    {
-      id: "1",
-      employer: "EWAY",
-      profession: "Барилгын мужаан",
-      startDate: "2023/01/01",
-      endDate: "2023/12/31",
-      internCountCapacity: 5,
-      salary: "Цалингүй",
-    },
-  ];
   const router = useRouter();
+  const [internships, setInternships] = useState([]);
   const [showModal, setShowModal] = useState(false);
 
   const handleModalToggle = () => {
     setShowModal(!showModal);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("/api/internships");
+        const data = await res.json();
+        setInternships(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <NavigationBar />
@@ -48,20 +44,24 @@ export default function Internship() {
               </tr>
             </thead>
             <tbody>
-              {data.map((item, index) => (
+              {internships.map((item, index) => (
                 <tr key={index}>
                   <td className="pr-16 py-6">{item.employer}</td>
                   <td className="pr-16 py-6">{item.profession}</td>
                   <td className="pr-16 py-6">
-                    {item.startDate} - {item.endDate}
+                    {item.start_date} - {item.end_date}
                   </td>
-                  <td className="pr-16 py-6">{item.internCountCapacity}</td>
+                  <td className="pr-16 py-6">{item.student_number}</td>
                   <td className="pr-16 py-6">{item.salary}</td>
                   <td className="py-6">
                     <button
                       type="button"
-                      class="text-white bg-blue-300  font-medium rounded-lg text-sm px-10 py-2.5 me-2 mb-2"
-                      onClick={() => router.push(`/internshipDetails`)}
+                      className="text-white bg-blue-300  font-medium rounded-lg text-sm px-10 py-2.5 me-2 mb-2"
+                      onClick={() =>
+                        router.push(
+                          `/internshipDetails?id=${item.internship_id}`
+                        )
+                      }
                     >
                       Дэлгэрэнгүй
                     </button>
@@ -125,115 +125,7 @@ export default function Internship() {
 
               <div className="p-4 md:p-5">
                 <div>
-                  <form>
-                    <div className="flex justify-around py-2">
-                      <div className="w-2/5">
-                        <label for="first_name" class="block mb-2 text-black ">
-                          ААН-н нэр
-                        </label>
-                        <input
-                          type="text"
-                          id="first_name"
-                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  "
-                          required
-                        />
-                      </div>
-                      <div className="w-2/5"></div>
-                    </div>
-                    <div className="flex justify-around py-2">
-                      <div className="w-2/5">
-                        <label for="first_name" class="block mb-2 text-black ">
-                          Утас
-                        </label>
-                        <input
-                          type="text"
-                          id="first_name"
-                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  "
-                          required
-                        />
-                      </div>
-                      <div className="w-2/5">
-                        <label for="first_name" class="block mb-2 text-black ">
-                          Цахим шуудан
-                        </label>
-                        <input
-                          type="text"
-                          id="first_name"
-                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  "
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="flex justify-around py-2">
-                      <div className="w-2/5">
-                        <label for="first_name" class="block mb-2 text-black ">
-                          Үйл ажиллагааны чиглэл
-                        </label>
-                        <input
-                          type="text"
-                          id="first_name"
-                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5 h-[100px]"
-                          required
-                        />
-                      </div>
-                      <div className="w-2/5">
-                        <label for="first_name" class="block mb-2 text-black ">
-                          Хаяг
-                        </label>
-                        <input
-                          type="text"
-                          id="first_name"
-                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  h-[100px]"
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="flex justify-around py-2">
-                      <div className="w-2/5">
-                        <label for="first_name" class="block mb-2 text-black ">
-                          Эхлэх огноо
-                        </label>
-                        <input
-                          type="text"
-                          id="first_name"
-                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  "
-                          required
-                        />
-                      </div>
-                      <div className="w-2/5">
-                        <label for="first_name" class="block mb-2 text-black ">
-                          Дуусах огноо
-                        </label>
-                        <input
-                          type="text"
-                          id="first_name"
-                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  "
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="flex justify-around py-2">
-                      <div className="w-2/5">
-                        <label for="first_name" class="block mb-2 text-black ">
-                          Дадлагын санал хүсэлт
-                        </label>
-                        <input
-                          type="text"
-                          id="first_name"
-                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  h-[100px]"
-                          required
-                        />
-                      </div>
-                      <div className="w-2/5"></div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      class="flex mt-4 py-2.5 w-full justify-center rounded-md bg-[#1a2744] px-3  text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#1a2744] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                      Хадгалах
-                    </button>
-                  </form>
+                  <form>{/* Form fields go here */}</form>
                 </div>
               </div>
             </div>
