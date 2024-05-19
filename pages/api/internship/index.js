@@ -1,36 +1,13 @@
-// pages/api/internships.js
-import { getDbConnection } from "../../../app/db/mongodb";
+import mongoose from "mongoose";
+import { InternshipModel } from "../../../app/schema/main"; // Adjust the path as needed
 
 export default async function handler(req, res) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ message: "Method Not Allowed" });
-  }
-
   try {
-    const pool = await getDbConnection();
-    const result = await pool.request().query(`
-      SELECT 
-        i.internship_id,
-        i.employer,
-        i.profession,
-        i.start_date,
-        i.end_date,
-        i.salary,
-        COUNT(a.student_id) AS student_number
-      FROM Internships i
-      
-    `);
-    // LEFT JOIN Applications a ON i.internship_id = a.internship_id
-    // GROUP BY
-    //   i.internship_id,
-    //   i.employer,
-    //   i.profession,
-    //   i.start_date,
-    //   i.end_date,
-    //   i.salary
-    res.status(200).json(result.recordset);
+    // Fetch all internship data
+    const internships = await InternshipModel.find();
+    res.status(200).json({ success: true, data: internships });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+    console.error("Error fetching internship data:", error);
+    res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 }

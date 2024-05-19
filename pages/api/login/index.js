@@ -1,17 +1,22 @@
 // pages/api/login.js
-import { clientPromise } from "../../../app/db/mongodb";
+import connect from "../../../app/db/mongoose";
+import mongoose from "mongoose";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
     const { username, password } = req.body;
-    console.log(username);
-    console.log(password);
-    try {
-      const client = await clientPromise;
-      const db = client.db();
 
-      const user = await db.collection("users").findOne({ username });
-      console.log(user);
+    try {
+      const mongooseConnection = await connect();
+      let UserModel;
+      if (mongoose.models.User) {
+        UserModel = mongoose.model("User");
+      } else {
+        UserModel = mongoose.model("User", UserSchema);
+      }
+
+      const user = await UserModel.findOne({ username });
+
       if (!user) {
         res.status(401).json({ message: "User not found" });
         return;

@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import NavigationBar from "../components/navigationBar";
+import axios from "axios";
 
 export default function Internship() {
   const router = useRouter();
@@ -15,9 +16,8 @@ export default function Internship() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/api/internships");
-        const data = await res.json();
-        setInternships(data);
+        const res = await axios.get("/api/internship");
+        setInternships(res.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
