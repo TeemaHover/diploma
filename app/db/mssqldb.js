@@ -7,6 +7,10 @@ const config = {
   server: process.env.DB_SERVER,
   database: process.env.DB_DATABASE,
   options: {
+    cryptoCredentialsDetails: {
+      minVersion: 'TLSv1', // Set the minimum SSL/TLS version
+      sigalgs: 'RSA+SHA256:ECDSA+SHA256:RSA+SHA384:ECDSA+SHA384:RSA+SHA512:ECDSA+SHA512'
+    },
     encrypt: true, // for azure
     trustServerCertificate: true, // change to true for local dev / self-signed certs
   },
