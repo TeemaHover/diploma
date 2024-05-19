@@ -1,5 +1,5 @@
 // pages/api/internship/[id].js
-import { getDbConnection } from "../../../app/db/mssqldb";
+import { getDbConnection } from "../../../app/db/mongodb";
 import sql from "mssql";
 
 export default async function handler(req, res) {
