@@ -17,7 +17,8 @@ export default function Internship() {
     const fetchData = async () => {
       try {
         const res = await axios.get("/api/internship");
-        setInternships(res.data);
+        setInternships(res.data.data);
+        console.log(res.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -44,7 +45,7 @@ export default function Internship() {
               </tr>
             </thead>
             <tbody>
-              {internships.map((item, index) => (
+              {internships?.map((item, index) => (
                 <tr key={index}>
                   <td className="pr-16 py-6">{item.employer}</td>
                   <td className="pr-16 py-6">{item.profession}</td>
