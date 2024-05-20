@@ -1,5 +1,6 @@
 // Define the Internship schema
 import mongoose from "mongoose";
+
 const InternshipSchema = new mongoose.Schema({
   employer: { type: String, required: true },
   profession: { type: String, required: true },
@@ -16,7 +17,7 @@ const StudentSchema = new mongoose.Schema({
   school: { type: String, required: true },
   start_date: { type: Date, required: true },
   end_date: { type: Date, required: true },
-  mark: { type: Number, required: true },
+  mark: { type: Number, required: false },
   description: { type: String },
 });
 
@@ -28,4 +29,4 @@ const InternshipModel =
 const StudentModel =
   mongoose.models.Student || mongoose.model("Student", StudentSchema);
 
-export { InternshipModel, StudentModel };
+export default { InternshipModel, StudentModel };

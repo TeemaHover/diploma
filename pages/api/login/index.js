@@ -2,6 +2,11 @@
 import connect from "../../../app/db/mongoose";
 import mongoose from "mongoose";
 
+const UserSchema = new mongoose.Schema({
+  username: { type: String, required: true },
+  password: { type: String, required: true },
+});
+
 export default async function handler(req, res) {
   if (req.method === "POST") {
     const { username, password } = req.body;
