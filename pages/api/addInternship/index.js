@@ -1,6 +1,6 @@
 // pages/api/addInternship.js
 
-import { InternshipModel } from "../../../app/schema/main"; // Update path as needed
+import { InternshipModel } from "../../../app/schema/internship"; // Update path as needed
 import connect from "../../../app/db/mongoose";
 
 export default async function handler(req, res) {

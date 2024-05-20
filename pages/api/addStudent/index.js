@@ -1,15 +1,15 @@
 // pages/api/addStudent.js
-
+import { StudentModel } from "../../../app/schema/student"; // Update path as needed
 import connect from "../../../app/db/mongoose";
-import StudentModel from "../../../app/schema/main";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
     try {
       await connect(); // Connect to MongoDB
       const {
+        Internship_id,
         student_name,
-        studentClass,
+        class: studentClass,
         school,
         start_date,
         end_date,
@@ -18,8 +18,9 @@ export default async function handler(req, res) {
       } = req.body;
 
       const student = new StudentModel({
+        Internship_id,
         student_name,
-        studentClass,
+        class: studentClass,
         school,
         start_date,
         end_date,
