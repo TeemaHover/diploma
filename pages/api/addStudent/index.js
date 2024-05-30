@@ -1,4 +1,5 @@
 import connect from "../../../app/db/mongoose";
+import { ObjectId } from "mongodb";
 
 export default async function handler(req, res) {
   if (req.method === "POST") {
@@ -34,6 +35,14 @@ export default async function handler(req, res) {
       };
 
       await collection.insertOne(studentDocument);
+      console.log(internship_id);
+      const obj = new ObjectId(internship_id);
+      const result = await db.connection
+        .collection("internships")
+        .updateOne({ _id: obj }, { $inc: { num_applicants: 1 } });
+      if (result.matchedCount === 0) {
+        return res.status(404).json({ error: "Internship not found" });
+      }
 
       res.status(201).json({ message: "Student added successfully" });
     } catch (error) {

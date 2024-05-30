@@ -10,6 +10,7 @@ export default async function handler(req, res) {
         .collection("internships")
         .find()
         .toArray();
+
       res.status(200).json({ success: true, data: internships });
     } catch (error) {
       console.error("Error fetching internship data:", error);
