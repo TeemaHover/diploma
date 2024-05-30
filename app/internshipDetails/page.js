@@ -5,10 +5,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import axios from "axios";
 
 const InternshipDetail = ({ internships }) => {
-  const [selectedItem, setSelectedItem] = useState(null);
-  const [selectedItemDes, setSelectedItemDes] = useState(null);
+  const [selectedItem, setSelectedItem] = useState("");
+  const [selectedItemDes, setSelectedItemDes] = useState("");
   const [details, setDetails] = useState([]);
-  const [studentId, setStudentId] = useState("");
   const [mark, setMark] = useState("");
   const [description, setDescription] = useState("");
 
@@ -48,10 +47,14 @@ const InternshipDetail = ({ internships }) => {
   const handleMarkSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`/api/internship/${selectedItem.internship_id}`, {
-        student_id: selectedItem.student_id,
-        mark,
-      });
+      await axios.post(
+        `/api/internship/marks?id=${selectedItem.internship_id}`,
+        {
+          student_name: selectedItem.student_name,
+          mark,
+          id: selectedItem.internship_id,
+        }
+      );
       fetchDetails();
       closeModal();
     } catch (error) {
@@ -62,10 +65,14 @@ const InternshipDetail = ({ internships }) => {
   const handleDescriptionSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`/api/internship/${selectedItemDes.internship_id}`, {
-        student_id: selectedItemDes.student_id,
-        description,
-      });
+      await axios.post(
+        `/api/internship/descriptions?id=${selectedItem.internship_id}`,
+        {
+          student_id: selectedItemDes.student_id,
+          description,
+          id: selectedItemDes.internship_id,
+        }
+      );
       fetchDetails();
       closeDesModal();
     } catch (error) {
@@ -238,7 +245,7 @@ const InternshipDetail = ({ internships }) => {
                   <ul className="my-4 space-y-3">
                     <li className="flex items-center justify-between">
                       <p>Овог:</p>
-                      <p>{selectedItemDes.student_name}</p>
+                      <p>{selectedItemDes.student_lname}</p>
                     </li>
                     <li className="flex items-center justify-between">
                       <p>Нэр:</p>
@@ -246,7 +253,7 @@ const InternshipDetail = ({ internships }) => {
                     </li>
                     <li className="flex items-center justify-between">
                       <p>Хүйс:</p>
-                      <p>{selectedItemDes.student_name}</p>
+                      <p>{selectedItemDes.sex}</p>
                     </li>
                     <li className="flex items-center justify-between">
                       <p>Байгууллага:</p>

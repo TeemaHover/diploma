@@ -24,12 +24,9 @@ export default async function handler(req, res) {
   } else if (req.method === "POST") {
     try {
       const db = await connect();
-      const { id } = req.query;
-
-      console.log(id);
-
+      console.log(req.body);
       if (req.url.includes("marks")) {
-        const { student_name, mark } = req.body;
+        const { student_name, mark, id } = req.body;
         await db.connection
           .collection("students")
           .updateOne(
@@ -40,13 +37,13 @@ export default async function handler(req, res) {
           .status(200)
           .json({ success: true, message: "Mark updated successfully" });
       } else if (req.url.includes("descriptions")) {
-        const { student_name, description } = req.body;
+        const { student_name, description, id } = req.body;
 
         await db.connection
           .collection("students")
           .updateOne(
             { internship_id: id, student_name: student_name },
-            { $set: { description } }
+            { $set: { description: description } }
           );
         res
           .status(200)
