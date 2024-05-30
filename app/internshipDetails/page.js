@@ -1,6 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NavigationBar from "../components/navigationBar";
+import { useRouter, useSearchParams } from "next/navigation";
+import axios from "axios";
 
 const InternshipDetail = ({ internships }) => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -10,20 +12,29 @@ const InternshipDetail = ({ internships }) => {
   const [mark, setMark] = useState("");
   const [description, setDescription] = useState("");
 
-  const fetchDetails = async (id) => {
-    const res = await fetch(`/api/internship/${id}`);
-    const data = await res.json();
-    setDetails(data);
+  const searchparam = useSearchParams();
+  const pagenumber = searchparam.get("id") || 1;
+
+  useEffect(() => {
+    fetchDetails();
+  }, []);
+
+  const fetchDetails = async () => {
+    try {
+      const res = await axios.get(`/api/internship/${pagenumber}`);
+      setDetails(res.data.data);
+      console.log(res.data.data);
+    } catch (error) {
+      console.error("Error fetching internship data:", error);
+    }
   };
 
   const handleEditClick = (item) => {
     setSelectedItem(item);
-    fetchDetails(item.internship_id);
   };
 
   const handleDesEditClick = (item) => {
     setSelectedItemDes(item);
-    fetchDetails(item.internship_id);
   };
 
   const closeModal = () => {
@@ -36,39 +47,39 @@ const InternshipDetail = ({ internships }) => {
 
   const handleMarkSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(`/api/internship/${selectedItem.internship_id}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ student_id: selectedItem.student_id, mark }),
-    });
-    const data = await res.json();
-    console.log(data);
-    fetchDetails(selectedItem.internship_id);
-    closeModal();
+    try {
+      await axios.post(`/api/internship/${selectedItem.internship_id}`, {
+        student_id: selectedItem.student_id,
+        mark,
+      });
+      fetchDetails();
+      closeModal();
+    } catch (error) {
+      console.error("Error adding mark:", error);
+    }
   };
 
   const handleDescriptionSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch(
-      `/api/internship/${selectedItemDes.internship_id}`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          student_id: selectedItemDes.student_id,
-          description,
-        }),
-      }
-    );
-    const data = await res.json();
-    console.log(data);
-    fetchDetails(selectedItemDes.internship_id);
-    closeDesModal();
+    try {
+      await axios.post(`/api/internship/${selectedItemDes.internship_id}`, {
+        student_id: selectedItemDes.student_id,
+        description,
+      });
+      fetchDetails();
+      closeDesModal();
+    } catch (error) {
+      console.error("Error adding description:", error);
+    }
   };
+
+  function formatDateToSlash(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}/${month}/${day}`;
+  }
 
   return (
     <>
@@ -89,41 +100,43 @@ const InternshipDetail = ({ internships }) => {
               </tr>
             </thead>
             <tbody>
-              {internships &&
-                internships.length > 0 &&
-                internships.map((item, index) => (
-                  <tr key={index}>
-                    <td className="pr-16 py-6">{item.name}</td>
-                    <td className="pr-16 py-6">{item.class}</td>
-                    <td className="pr-16 py-6">{item.company}</td>
-                    <td className="pr-16 py-6">{item.startDate}</td>
-                    <td className="pr-16 py-6">{item.endDate}</td>
-                    <td className="pr-16 py-6">
-                      {item.point}%
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-6 h-6"
-                        onClick={() => handleEditClick(item)}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                        />
-                      </svg>
-                    </td>
-                    <td
-                      className="pr-16 py-6"
-                      onClick={() => handleDesEditClick(item)}
+              {details?.map((item, index) => (
+                <tr key={index}>
+                  <td className="pr-16 py-6">{item.student_name}</td>
+                  <td className="pr-16 py-6">{item.studentClass}</td>
+                  <td className="pr-16 py-6">{item.school}</td>
+                  <td className="pr-16 py-6">
+                    {formatDateToSlash(item.start_date)}
+                  </td>
+                  <td className="pr-16 py-6">
+                    {formatDateToSlash(item.end_date)}
+                  </td>
+                  <td className="pr-16 py-6 flex">
+                    {item.mark}%
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="currentColor"
+                      className="w-6 h-6"
+                      onClick={() => handleEditClick(item)}
                     >
-                      {item.description}
-                    </td>
-                  </tr>
-                ))}
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
+                      />
+                    </svg>
+                  </td>
+                  <td
+                    className="pr-16 py-6"
+                    onClick={() => handleDesEditClick(item)}
+                  >
+                    {item.description}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -154,19 +167,19 @@ const InternshipDetail = ({ internships }) => {
                   <ul className="my-4 space-y-3">
                     <li className="flex items-center justify-between">
                       <p>Овог:</p>
-                      <p>{selectedItem.name}</p>
+                      <p>{selectedItem.student_lname}</p>
                     </li>
                     <li className="flex items-center justify-between">
                       <p>Нэр:</p>
-                      <p>{selectedItem.name}</p>
+                      <p>{selectedItem.student_name}</p>
                     </li>
                     <li className="flex items-center justify-between">
                       <p>Хүйс:</p>
-                      <p>{selectedItem.name}</p>
+                      <p>{selectedItem.sex}</p>
                     </li>
                     <li className="flex items-center justify-between">
                       <p>Байгууллага:</p>
-                      <p>{selectedItem.company}</p>
+                      <p>{selectedItem.school}</p>
                     </li>
                   </ul>
                   <div>
@@ -225,19 +238,19 @@ const InternshipDetail = ({ internships }) => {
                   <ul className="my-4 space-y-3">
                     <li className="flex items-center justify-between">
                       <p>Овог:</p>
-                      <p>{selectedItemDes.name}</p>
+                      <p>{selectedItemDes.student_name}</p>
                     </li>
                     <li className="flex items-center justify-between">
                       <p>Нэр:</p>
-                      <p>{selectedItemDes.name}</p>
+                      <p>{selectedItemDes.student_name}</p>
                     </li>
                     <li className="flex items-center justify-between">
                       <p>Хүйс:</p>
-                      <p>{selectedItemDes.name}</p>
+                      <p>{selectedItemDes.student_name}</p>
                     </li>
                     <li className="flex items-center justify-between">
                       <p>Байгууллага:</p>
-                      <p>{selectedItemDes.company}</p>
+                      <p>{selectedItemDes.school}</p>
                     </li>
                   </ul>
                   <div>

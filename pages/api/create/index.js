@@ -23,7 +23,10 @@ export default async function handler(req, res) {
       }
 
       // Create the new user
-      const newUser = await UserModel.create({ username, password });
+      const newUser = await UserModel.create({
+        username,
+        password,
+      });
 
       res
         .status(201)

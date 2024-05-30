@@ -1,34 +1,64 @@
-// pages/api/internship/[id].js
-import { getDbConnection } from "../../../app/db/mongoose";
-import sql from "mssql";
+import { ObjectId } from "mongodb";
+import connect from "../../../app/db/mongoose";
 
 export default async function handler(req, res) {
-  const { id } = req.query;
+  if (req.method === "GET") {
+    try {
+      const db = await connect();
+      const { id } = req.query;
+      console.log(id);
+      const internship = await db.connection
+        .collection("students")
+        .find({ internship_id: id })
+        .toArray();
 
-  if (req.method !== "GET") {
-    return res.status(405).json({ message: "Method Not Allowed" });
-  }
+      if (internship) {
+        res.status(200).json({ success: true, data: internship });
+      } else {
+        res.status(404).json({ success: false, error: "Students not found" });
+      }
+    } catch (error) {
+      console.error("Error fetching internship details:", error);
+      res.status(500).json({ success: false, error: "Internal Server Error" });
+    }
+  } else if (req.method === "POST") {
+    try {
+      const db = await connect();
+      const { id } = req.query;
 
-  try {
-    const pool = await getDbConnection();
-    const result = await pool.request().input("internship_id", sql.Int, id)
-      .query(`
-        SELECT 
-          s.student_name,
-          s.class,
-          s.school,
-          g.start_date,
-          g.end_date,
-          g.mark,
-          g.description
-        FROM StudentGroups g
-        INNER JOIN Students s ON g.student_id = s.student_id
-        WHERE g.internship_id = @internship_id
-      `);
+      console.log(id);
 
-    res.status(200).json(result.recordset);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal Server Error" });
+      if (req.url.includes("marks")) {
+        const { student_name, mark } = req.body;
+        await db.connection
+          .collection("students")
+          .updateOne(
+            { internship_id: id, student_name: student_name },
+            { $set: { mark: mark } }
+          );
+        res
+          .status(200)
+          .json({ success: true, message: "Mark updated successfully" });
+      } else if (req.url.includes("descriptions")) {
+        const { student_name, description } = req.body;
+
+        await db.connection
+          .collection("students")
+          .updateOne(
+            { internship_id: id, student_name: student_name },
+            { $set: { description } }
+          );
+        res
+          .status(200)
+          .json({ success: true, message: "Description updated successfully" });
+      } else {
+        res.status(400).json({ success: false, error: "Invalid request" });
+      }
+    } catch (error) {
+      console.error("Error updating internship details:", error);
+      res.status(500).json({ success: false, error: "Internal Server Error" });
+    }
+  } else {
+    res.status(405).json({ success: false, error: "Method Not Allowed" });
   }
 }

@@ -1,6 +1,4 @@
 import connect from "../../../app/db/mongoose";
-import mongoose from "mongoose";
-import InternshipModel from "../../../app/schema/internship"; // Adjust the path as needed
 
 export default async function handler(req, res) {
   if (req.method === "GET") {

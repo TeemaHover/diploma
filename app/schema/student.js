@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { unique } from "next/dist/build/utils";
 
 const StudentSchema = new mongoose.Schema({
   Internship_id: { type: String, required: true },
@@ -8,7 +9,9 @@ const StudentSchema = new mongoose.Schema({
   start_date: { type: Date, required: true },
   end_date: { type: Date, required: true },
   mark: { type: Number, required: false },
-  description: { type: String },
+  description: { type: String, default: "" },
+  student_lname: { type: String, required: true },
+  sex: { type: String, required: true },
 });
 const StudentModel =
   mongoose.models.Student || mongoose.model("Student", StudentSchema);

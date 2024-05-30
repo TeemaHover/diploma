@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import NavigationBar from "../components/navigationBar";
+
 import axios from "axios";
 
 export default function Internship() {
@@ -18,7 +19,6 @@ export default function Internship() {
       try {
         const res = await axios.get("/api/internship");
         setInternships(res.data.data);
-        console.log(res.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -27,6 +27,13 @@ export default function Internship() {
     fetchData();
   }, []);
 
+  function formatDateToSlash(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}/${month}/${day}`;
+  }
   return (
     <>
       <NavigationBar />
@@ -50,7 +57,8 @@ export default function Internship() {
                   <td className="pr-16 py-6">{item.employer}</td>
                   <td className="pr-16 py-6">{item.profession}</td>
                   <td className="pr-16 py-6">
-                    {item.start_date} - {item.end_date}
+                    {formatDateToSlash(item.start_date)} -{" "}
+                    {formatDateToSlash(item.end_date)}
                   </td>
                   <td className="pr-16 py-6">{item.student_number}</td>
                   <td className="pr-16 py-6">{item.salary}</td>
@@ -59,9 +67,7 @@ export default function Internship() {
                       type="button"
                       className="text-white bg-blue-300  font-medium rounded-lg text-sm px-10 py-2.5 me-2 mb-2"
                       onClick={() =>
-                        router.push(
-                          `/internshipDetails?id=${item.internship_id}`
-                        )
+                        router.push(`/internshipDetails?id=${item._id}`)
                       }
                     >
                       Дэлгэрэнгүй
