@@ -66,9 +66,9 @@ const InternshipDetail = ({ internships }) => {
     e.preventDefault();
     try {
       await axios.post(
-        `/api/internship/descriptions?id=${selectedItem.internship_id}`,
+        `/api/internship/descriptions?id=${selectedItemDes.internship_id}`,
         {
-          student_id: selectedItemDes.student_id,
+          student_name: selectedItemDes.student_name,
           description,
           id: selectedItemDes.internship_id,
         }
