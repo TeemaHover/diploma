@@ -1,5 +1,5 @@
 import Image from "next/image";
-import logo from "../images/disney.png";
+import logo from "../images/logo.jpg";
 
 export default function NavigationBar() {
   return (
@@ -8,10 +8,10 @@ export default function NavigationBar() {
         <div className="relative flex h-16 items-center justify-between">
           <div className="flex flex-1 items-center justify-between sm:items-stretch sm:justify-between">
             <div className="flex flex-shrink-0 items-center">
-              <Image src={logo} width={50} height={50} alt="logo" />
+              <Image src={logo} width={150} height={150} alt="logo" />
             </div>
-            <div className="hidden sm:ml-6 sm:block">
-              <div className="flex space-x-4">
+            <div className="sm:ml-6 sm:block md:flex md:items-center">
+              <div className="flex space-x-4 ">
                 <a
                   href="/internship"
                   className="text-gray-300  hover:text-red-500 rounded-md px-3 py-2 text-sm font-medium"
