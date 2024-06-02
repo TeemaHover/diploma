@@ -134,7 +134,115 @@ export default function Internship() {
 
               <div className="p-4 md:p-5">
                 <div>
-                  <form>{/* Form fields go here */}</form>
+                  <form>
+                    <div className="flex justify-around py-2">
+                      <div className="w-2/5">
+                        <label for="first_name" class="block mb-2 text-black ">
+                          ААН-н нэр
+                        </label>
+                        <input
+                          type="text"
+                          id="first_name"
+                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  "
+                          required
+                        />
+                      </div>
+                      <div className="w-2/5"></div>
+                    </div>
+                    <div className="flex justify-around py-2">
+                      <div className="w-2/5">
+                        <label for="first_name" class="block mb-2 text-black ">
+                          Утас
+                        </label>
+                        <input
+                          type="text"
+                          id="first_name"
+                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  "
+                          required
+                        />
+                      </div>
+                      <div className="w-2/5">
+                        <label for="first_name" class="block mb-2 text-black ">
+                          Цахим шуудан
+                        </label>
+                        <input
+                          type="text"
+                          id="first_name"
+                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  "
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-around py-2">
+                      <div className="w-2/5">
+                        <label for="first_name" class="block mb-2 text-black ">
+                          Үйл ажиллагааны чиглэл
+                        </label>
+                        <input
+                          type="text"
+                          id="first_name"
+                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5 h-[100px]"
+                          required
+                        />
+                      </div>
+                      <div className="w-2/5">
+                        <label for="first_name" class="block mb-2 text-black ">
+                          Хаяг
+                        </label>
+                        <input
+                          type="text"
+                          id="first_name"
+                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  h-[100px]"
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-around py-2">
+                      <div className="w-2/5">
+                        <label for="first_name" class="block mb-2 text-black ">
+                          Эхлэх огноо
+                        </label>
+                        <input
+                          type="text"
+                          id="first_name"
+                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  "
+                          required
+                        />
+                      </div>
+                      <div className="w-2/5">
+                        <label for="first_name" class="block mb-2 text-black ">
+                          Дуусах огноо
+                        </label>
+                        <input
+                          type="text"
+                          id="first_name"
+                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  "
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="flex justify-around py-2">
+                      <div className="w-2/5">
+                        <label for="first_name" class="block mb-2 text-black ">
+                          Дадлагын санал хүсэлт
+                        </label>
+                        <input
+                          type="text"
+                          id="first_name"
+                          class="bg-gray-50 border border-gray-300 text-black  rounded-lg  block w-full p-2.5  h-[100px]"
+                          required
+                        />
+                      </div>
+                      <div className="w-2/5"></div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      class="flex mt-4 py-2.5 w-full justify-center rounded-md bg-[#3050a1] px-3  text-sm font-semibold leading-6 text-white shadow-sm hover:bg-[#3050a1] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                    >
+                      Хадгалах
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>
