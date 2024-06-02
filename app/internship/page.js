@@ -19,6 +19,7 @@ export default function Internship() {
       try {
         const res = await axios.get("/api/internship");
         setInternships(res.data.data);
+        console.log(res.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

@@ -3,12 +3,34 @@ import connect from "../../../app/db/mongoose";
 export default async function handler(req, res) {
   if (req.method === "GET") {
     try {
-      const db = await connect(); // Connect to MongoDB
+      const db = await connect();
 
-      // Use the connection object to fetch data
+      // Define the aggregation pipeline
+      const pipeline = [
+        {
+          $addFields: {
+            intern_id: { $toString: "$_id" },
+          },
+        },
+        {
+          $lookup: {
+            from: "students",
+            localField: "intern_id",
+            foreignField: "internship_id",
+            as: "num_applicants",
+          },
+        },
+        {
+          $addFields: {
+            num_applicants: { $size: "$num_applicants" },
+          },
+        },
+      ];
+
+      // Execute the aggregation pipeline
       const internships = await db.connection
         .collection("internships")
-        .find()
+        .aggregate(pipeline)
         .toArray();
 
       res.status(200).json({ success: true, data: internships });
