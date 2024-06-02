@@ -32,7 +32,7 @@ export default function NavigationBar() {
                 </a>
 
                 <a
-                  href="#"
+                  href="/"
                   className="text-gray-300  hover:text-red-500 rounded-md px-3 py-2 text-sm font-medium"
                 >
                   Гарах
