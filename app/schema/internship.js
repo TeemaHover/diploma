@@ -8,6 +8,7 @@ const InternshipSchema = new mongoose.Schema({
   end_date: { type: Date, required: true },
   salary: { type: Number, required: true },
   num_applicants: { type: Number, default: 0 },
+  max_applicants: { type: Number, default: 30 },
 });
 
 const InternshipModel =

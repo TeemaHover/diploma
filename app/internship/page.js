@@ -60,7 +60,9 @@ export default function Internship() {
                     {formatDateToSlash(item.start_date)} -{" "}
                     {formatDateToSlash(item.end_date)}
                   </td>
-                  <td className="pr-16 py-6">{item.num_applicants} / 30</td>
+                  <td className="pr-16 py-6">
+                    {item.num_applicants} / {item.max_applicants}
+                  </td>
                   <td className="pr-16 py-6">{item.salary}</td>
                   <td className="py-6">
                     <button
